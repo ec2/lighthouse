@@ -28,23 +28,24 @@ pub type Withdrawals<E> = VariableList<Withdrawal, <E as EthSpec>::MaxWithdrawal
             TreeHash,
             TestRandom,
             Derivative,
-            arbitrary::Arbitrary
         ),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
         derivative(PartialEq, Hash(bound = "E: EthSpec")),
         serde(bound = "E: EthSpec", deny_unknown_fields),
-        arbitrary(bound = "E: EthSpec")
+        cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))
     ),
     cast_error(ty = "Error", expr = "BeaconStateError::IncorrectStateVariant"),
     partial_getter_error(ty = "Error", expr = "BeaconStateError::IncorrectStateVariant"),
     map_into(FullPayload, BlindedPayload),
     map_ref_into(ExecutionPayloadHeader)
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    Debug, Clone, Serialize, Deserialize, Encode, TreeHash, Derivative, arbitrary::Arbitrary,
+    Debug, Clone, Serialize, Deserialize, Encode, TreeHash, Derivative,
 )]
 #[derivative(PartialEq, Hash(bound = "E: EthSpec"))]
 #[serde(bound = "E: EthSpec", untagged)]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 #[ssz(enum_behaviour = "transparent")]
 #[tree_hash(enum_behaviour = "transparent")]
 pub struct ExecutionPayload<E: EthSpec> {

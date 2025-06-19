@@ -11,8 +11,8 @@ use tree_hash_derive::TreeHash;
 /// An exit voluntarily submitted a validator who wishes to withdraw.
 ///
 /// Spec v0.12.1
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     PartialEq,
     Hash,

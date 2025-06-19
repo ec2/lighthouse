@@ -9,7 +9,6 @@ use tree_hash_derive::TreeHash;
 ///
 /// Spec v0.12.1
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     Clone,
     Copy,
@@ -24,6 +23,7 @@ use tree_hash_derive::TreeHash;
     TreeHash,
     TestRandom,
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Checkpoint {
     pub epoch: Epoch,
     pub root: Hash256,

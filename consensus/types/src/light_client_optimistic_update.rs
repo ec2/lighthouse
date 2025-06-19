@@ -31,21 +31,22 @@ use tree_hash_derive::TreeHash;
             Decode,
             Encode,
             TestRandom,
-            arbitrary::Arbitrary,
             TreeHash,
         ),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
         serde(bound = "E: EthSpec", deny_unknown_fields),
-        arbitrary(bound = "E: EthSpec"),
+        cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec")),
     )
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    Debug, Clone, Serialize, Encode, TreeHash, Deserialize, arbitrary::Arbitrary, PartialEq,
+    Debug, Clone, Serialize, Encode, TreeHash, Deserialize, PartialEq,
 )]
 #[serde(untagged)]
 #[tree_hash(enum_behaviour = "transparent")]
 #[ssz(enum_behaviour = "transparent")]
 #[serde(bound = "E: EthSpec", deny_unknown_fields)]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct LightClientOptimisticUpdate<E: EthSpec> {
     /// The last `BeaconBlockHeader` from the last attested block by the sync committee.
     #[superstruct(only(Altair), partial_getter(rename = "attested_header_altair"))]

@@ -13,6 +13,7 @@ pub enum Error {
 }
 
 /// An aggregation of `SyncCommitteeMessage`s, used in creating a `SignedContributionAndProof`.
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
     Debug,
     Clone,
@@ -23,10 +24,9 @@ pub enum Error {
     Decode,
     TreeHash,
     TestRandom,
-    arbitrary::Arbitrary,
 )]
 #[serde(bound = "E: EthSpec")]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct SyncCommitteeContribution<E: EthSpec> {
     pub slot: Slot,
     pub beacon_block_root: Hash256,

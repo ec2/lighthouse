@@ -10,7 +10,6 @@ use tree_hash_derive::TreeHash;
 ///
 /// Spec v0.12.1
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     PartialEq,
     Hash,
@@ -22,6 +21,7 @@ use tree_hash_derive::TreeHash;
     TreeHash,
     TestRandom,
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct DepositData {
     pub pubkey: PublicKeyBytes,
     pub withdrawal_credentials: Hash256,

@@ -23,8 +23,8 @@ use std::hash::Hash;
 #[cfg(feature = "legacy-arith")]
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, Sub, SubAssign};
 
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    arbitrary::Arbitrary,
     Clone,
     Copy,
     Default,
@@ -39,8 +39,8 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, Sub, SubAssi
 #[serde(transparent)]
 pub struct Slot(#[serde(with = "serde_utils::quoted_u64")] u64);
 
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    arbitrary::Arbitrary,
     Clone,
     Copy,
     Default,

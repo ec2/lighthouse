@@ -11,7 +11,8 @@ use ssz::Encode;
 use ssz_types::typenum::Unsigned;
 use std::cmp;
 
-#[derive(arbitrary::Arbitrary, PartialEq, Debug, Clone)]
+#[derive(PartialEq, Debug, Clone)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct SyncSelectionProof(Signature);
 
 impl SyncSelectionProof {

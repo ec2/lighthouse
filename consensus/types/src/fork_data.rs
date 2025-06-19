@@ -10,7 +10,6 @@ use tree_hash_derive::TreeHash;
 ///
 /// Spec v0.12.1
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     Clone,
     PartialEq,
@@ -22,6 +21,7 @@ use tree_hash_derive::TreeHash;
     TreeHash,
     TestRandom,
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct ForkData {
     #[serde(with = "serde_utils::bytes_4_hex")]
     pub current_version: [u8; 4],

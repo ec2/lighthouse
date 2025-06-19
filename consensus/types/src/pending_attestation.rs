@@ -9,6 +9,7 @@ use tree_hash_derive::TreeHash;
 /// An attestation that has been included in the state but not yet fully processed.
 ///
 /// Spec v0.12.1
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
     Debug,
     Clone,
@@ -19,9 +20,8 @@ use tree_hash_derive::TreeHash;
     Decode,
     TreeHash,
     TestRandom,
-    arbitrary::Arbitrary,
 )]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct PendingAttestation<E: EthSpec> {
     pub aggregation_bits: BitList<E::MaxValidatorsPerCommittee>,
     pub data: AttestationData,

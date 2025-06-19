@@ -30,21 +30,20 @@ use tree_hash_derive::TreeHash;
             Decode,
             Encode,
             TestRandom,
-            arbitrary::Arbitrary,
             TreeHash,
         ),
         serde(bound = "E: EthSpec", deny_unknown_fields),
-        arbitrary(bound = "E: EthSpec"),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
+        cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec")),
     )
 )]
-#[derive(
-    Debug, Clone, Serialize, TreeHash, Encode, Deserialize, arbitrary::Arbitrary, PartialEq,
-)]
+#[derive(Debug, Clone, Serialize, TreeHash, Encode, Deserialize, PartialEq)]
 #[serde(untagged)]
 #[tree_hash(enum_behaviour = "transparent")]
 #[ssz(enum_behaviour = "transparent")]
 #[serde(bound = "E: EthSpec", deny_unknown_fields)]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct LightClientHeader<E: EthSpec> {
     pub beacon: BeaconBlockHeader,
 
@@ -69,7 +68,7 @@ pub struct LightClientHeader<E: EthSpec> {
     #[ssz(skip_serializing, skip_deserializing)]
     #[tree_hash(skip_hashing)]
     #[serde(skip)]
-    #[arbitrary(default)]
+    #[cfg_attr(feature = "arbitrary", arbitrary(default))]
     pub _phantom_data: PhantomData<E>,
 }
 

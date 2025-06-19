@@ -1,10 +1,10 @@
-use arbitrary::Arbitrary;
 use safe_arith::{ArithError, SafeArith};
 
 /// A balance which will never be below the specified `minimum`.
 ///
 /// This is an effort to ensure the `EFFECTIVE_BALANCE_INCREMENT` minimum is always respected.
-#[derive(PartialEq, Debug, Clone, Copy, Arbitrary)]
+#[derive(PartialEq, Debug, Clone, Copy)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Balance {
     raw: u64,
     minimum: u64,
