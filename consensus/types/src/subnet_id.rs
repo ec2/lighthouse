@@ -22,7 +22,8 @@ static SUBNET_ID_TO_STRING: LazyLock<Vec<String>> = LazyLock::new(|| {
     v
 });
 
-#[derive(arbitrary::Arbitrary, Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[serde(transparent)]
 pub struct SubnetId(#[serde(with = "serde_utils::quoted_u64")] u64);
 
@@ -101,11 +102,11 @@ impl SubnetId {
         spec: &ChainSpec,
     ) -> impl Iterator<Item = SubnetId> {
         // The bits of the node-id we are using to define the subnets.
-        let prefix_bits = spec.attestation_subnet_prefix_bits as u64;
+        let prefix_bits = spec.attestation_subnet_prefix_bits as u32;
 
         let node_id = U256::from_be_slice(&raw_node_id);
         // calculate the prefixes used to compute the subnet and shuffling
-        let node_id_prefix = (node_id >> (NODE_ID_BITS - prefix_bits))
+        let node_id_prefix = (node_id >> (NODE_ID_BITS as u32 - prefix_bits))
             .as_le_slice()
             .get_u64_le();
 

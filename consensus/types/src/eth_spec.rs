@@ -50,7 +50,7 @@ impl fmt::Display for EthSpecId {
 }
 
 pub trait EthSpec:
-    'static + Default + Sync + Send + Clone + Debug + PartialEq + Eq + for<'a> arbitrary::Arbitrary<'a>
+    'static + Default + Sync + Send + Clone + Debug + PartialEq + Eq
 {
     /*
      * Constants
@@ -374,7 +374,6 @@ pub trait EthSpec:
         Self::KzgCommitmentsInclusionProofDepth::to_usize()
     }
 }
-
 /// Macro to inherit some type values from another EthSpec.
 #[macro_export]
 macro_rules! params_from_eth_spec {
@@ -384,7 +383,8 @@ macro_rules! params_from_eth_spec {
 }
 
 /// Ethereum Foundation specifications.
-#[derive(Clone, PartialEq, Eq, Debug, Default, Serialize, Deserialize, arbitrary::Arbitrary)]
+#[derive(Clone, PartialEq, Eq, Debug, Default, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct MainnetEthSpec;
 
 impl EthSpec for MainnetEthSpec {
@@ -448,7 +448,8 @@ impl EthSpec for MainnetEthSpec {
 }
 
 /// Ethereum Foundation minimal spec, as defined in the eth2.0-specs repo.
-#[derive(Clone, PartialEq, Eq, Debug, Default, Serialize, Deserialize, arbitrary::Arbitrary)]
+#[derive(Clone, PartialEq, Eq, Debug, Default, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct MinimalEthSpec;
 
 impl EthSpec for MinimalEthSpec {
@@ -515,7 +516,8 @@ impl EthSpec for MinimalEthSpec {
 }
 
 /// Gnosis Beacon Chain specifications.
-#[derive(Clone, PartialEq, Eq, Debug, Default, Serialize, Deserialize, arbitrary::Arbitrary)]
+#[derive(Clone, PartialEq, Eq, Debug, Default, Serialize, Deserialize)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct GnosisEthSpec;
 
 impl EthSpec for GnosisEthSpec {

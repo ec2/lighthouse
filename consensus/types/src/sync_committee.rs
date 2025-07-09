@@ -24,6 +24,7 @@ impl From<ArithError> for Error {
     }
 }
 
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
     Debug,
     PartialEq,
@@ -34,10 +35,9 @@ impl From<ArithError> for Error {
     Decode,
     TreeHash,
     TestRandom,
-    arbitrary::Arbitrary,
 )]
 #[serde(bound = "E: EthSpec")]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct SyncCommittee<E: EthSpec> {
     pub pubkeys: FixedVector<PublicKeyBytes, E::SyncCommitteeSize>,
     pub aggregate_pubkey: PublicKeyBytes,

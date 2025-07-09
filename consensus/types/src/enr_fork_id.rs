@@ -10,8 +10,8 @@ use tree_hash_derive::TreeHash;
 /// a nodes local ENR.
 ///
 /// Spec v0.11
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     Clone,
     PartialEq,

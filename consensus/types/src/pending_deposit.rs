@@ -6,7 +6,6 @@ use test_random_derive::TestRandom;
 use tree_hash_derive::TreeHash;
 
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     PartialEq,
     Hash,
@@ -18,6 +17,7 @@ use tree_hash_derive::TreeHash;
     TreeHash,
     TestRandom,
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct PendingDeposit {
     pub pubkey: PublicKeyBytes,
     pub withdrawal_credentials: Hash256,

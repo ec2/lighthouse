@@ -40,14 +40,17 @@ pub const BLOB_KZG_COMMITMENTS_INDEX: usize = 11;
             TreeHash,
             TestRandom,
             Derivative,
-            arbitrary::Arbitrary
         ),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
         derivative(PartialEq, Hash(bound = "E: EthSpec, Payload: AbstractExecPayload<E>")),
         serde(
             bound = "E: EthSpec, Payload: AbstractExecPayload<E>",
             deny_unknown_fields
         ),
-        arbitrary(bound = "E: EthSpec, Payload: AbstractExecPayload<E>"),
+        cfg_attr(
+            feature = "arbitrary",
+            arbitrary(bound = "E: EthSpec, Payload: AbstractExecPayload<E>")
+        ),
     ),
     specific_variant_attributes(
         Base(metastruct(mappings(beacon_block_body_base_fields(groups(fields))))),
@@ -61,11 +64,15 @@ pub const BLOB_KZG_COMMITMENTS_INDEX: usize = 11;
     cast_error(ty = "Error", expr = "Error::IncorrectStateVariant"),
     partial_getter_error(ty = "Error", expr = "Error::IncorrectStateVariant")
 )]
-#[derive(Debug, Clone, Serialize, Deserialize, Derivative, arbitrary::Arbitrary)]
+#[derive(Debug, Clone, Serialize, Deserialize, Derivative)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derivative(PartialEq, Hash(bound = "E: EthSpec"))]
 #[serde(untagged)]
 #[serde(bound = "E: EthSpec, Payload: AbstractExecPayload<E>")]
-#[arbitrary(bound = "E: EthSpec, Payload: AbstractExecPayload<E>")]
+#[cfg_attr(
+    feature = "arbitrary",
+    arbitrary(bound = "E: EthSpec, Payload: AbstractExecPayload<E>")
+)]
 pub struct BeaconBlockBody<E: EthSpec, Payload: AbstractExecPayload<E> = FullPayload<E>> {
     pub randao_reveal: Signature,
     pub eth1_data: Eth1Data,
@@ -126,7 +133,7 @@ pub struct BeaconBlockBody<E: EthSpec, Payload: AbstractExecPayload<E> = FullPay
     #[ssz(skip_serializing, skip_deserializing)]
     #[tree_hash(skip_hashing)]
     #[serde(skip)]
-    #[arbitrary(default)]
+    #[cfg_attr(feature = "arbitrary", arbitrary(default))]
     pub _phantom: PhantomData<Payload>,
 }
 

@@ -26,14 +26,15 @@ use tree_hash_derive::TreeHash;
             Encode,
             TestRandom,
             Derivative,
-            arbitrary::Arbitrary,
             TreeHash,
         ),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
         derivative(PartialEq, Hash(bound = "E: EthSpec")),
         serde(bound = "E: EthSpec", deny_unknown_fields),
-        arbitrary(bound = "E: EthSpec"),
+        cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec")),
     )
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
     Debug,
     Clone,
@@ -42,14 +43,13 @@ use tree_hash_derive::TreeHash;
     Encode,
     Derivative,
     Deserialize,
-    arbitrary::Arbitrary,
     PartialEq,
 )]
 #[serde(untagged)]
 #[tree_hash(enum_behaviour = "transparent")]
 #[ssz(enum_behaviour = "transparent")]
 #[serde(bound = "E: EthSpec", deny_unknown_fields)]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct IndexedAttestation<E: EthSpec> {
     /// Lists validator registry indices, not committee indices.
     #[superstruct(only(Base), partial_getter(rename = "attesting_indices_base"))]

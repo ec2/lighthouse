@@ -12,7 +12,6 @@ pub const DEPOSIT_TREE_DEPTH: usize = 32;
 ///
 /// Spec v0.12.1
 #[derive(
-    arbitrary::Arbitrary,
     Debug,
     PartialEq,
     Hash,
@@ -24,6 +23,7 @@ pub const DEPOSIT_TREE_DEPTH: usize = 32;
     TreeHash,
     TestRandom,
 )]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 pub struct Deposit {
     pub proof: FixedVector<Hash256, U33>,
     pub data: DepositData,

@@ -76,7 +76,7 @@ impl CommitteeCache {
             .saturating_sub(spec.min_seed_lookahead)
             .saturating_sub(1u64);
 
-        if reqd_randao_epoch < state.min_randao_epoch() || epoch > state.current_epoch() + 1 {
+        if reqd_randao_epoch < state.min_randao_epoch() || epoch > state.current_epoch().safe_add(1u64)? {
             return Err(Error::EpochOutOfBounds);
         }
 
@@ -371,6 +371,7 @@ where
     active
 }
 
+#[cfg(feature = "arbitrary")]
 impl arbitrary::Arbitrary<'_> for CommitteeCache {
     fn arbitrary(_u: &mut arbitrary::Unstructured<'_>) -> arbitrary::Result<Self> {
         Ok(Self::default())

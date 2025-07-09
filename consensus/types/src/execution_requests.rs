@@ -2,7 +2,7 @@ use crate::test_utils::TestRandom;
 use crate::{ConsolidationRequest, DepositRequest, EthSpec, Hash256, WithdrawalRequest};
 use alloy_primitives::Bytes;
 use derivative::Derivative;
-use ethereum_hashing::{DynamicContext, Sha256Context};
+use ethereum_hashing::{Context, Sha256Context};
 use serde::{Deserialize, Serialize};
 use ssz::Encode;
 use ssz_derive::{Decode, Encode};
@@ -17,21 +17,12 @@ pub type WithdrawalRequests<E> =
 pub type ConsolidationRequests<E> =
     VariableList<ConsolidationRequest, <E as EthSpec>::MaxConsolidationRequestsPerPayload>;
 
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
-    arbitrary::Arbitrary,
-    Debug,
-    Derivative,
-    Default,
-    Clone,
-    Serialize,
-    Deserialize,
-    Encode,
-    Decode,
-    TreeHash,
-    TestRandom,
+    Debug, Derivative, Default, Clone, Serialize, Deserialize, Encode, Decode, TreeHash, TestRandom,
 )]
 #[serde(bound = "E: EthSpec")]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 #[derivative(PartialEq, Eq, Hash(bound = "E: EthSpec"))]
 pub struct ExecutionRequests<E: EthSpec> {
     pub deposits: DepositRequests<E>,
@@ -72,10 +63,10 @@ impl<E: EthSpec> ExecutionRequests<E> {
     ///
     /// `sha256(sha256(requests_0) ++ sha256(requests_1) ++ ...)`
     pub fn requests_hash(&self) -> Hash256 {
-        let mut hasher = DynamicContext::new();
+        let mut hasher = Context::new();
 
         for request in self.get_execution_requests_list().iter() {
-            let mut request_hasher = DynamicContext::new();
+            let mut request_hasher = Context::new();
             request_hasher.update(request);
             let request_hash = request_hasher.finalize();
 

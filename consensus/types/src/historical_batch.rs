@@ -9,6 +9,7 @@ use tree_hash_derive::TreeHash;
 /// Historical block and state roots.
 ///
 /// Spec v0.12.1
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
     Debug,
     Clone,
@@ -19,9 +20,8 @@ use tree_hash_derive::TreeHash;
     Decode,
     TreeHash,
     TestRandom,
-    arbitrary::Arbitrary,
 )]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct HistoricalBatch<E: EthSpec> {
     #[test_random(default)]
     pub block_roots: Vector<Hash256, E::SlotsPerHistoricalRoot>,

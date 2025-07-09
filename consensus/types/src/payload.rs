@@ -49,6 +49,7 @@ pub trait ExecPayload<E: EthSpec>: Debug + Clone + PartialEq + Hash + TreeHash +
 }
 
 /// `ExecPayload` functionality the requires ownership.
+#[cfg(feature = "arbitrary")]
 pub trait OwnedExecPayload<E: EthSpec>:
     ExecPayload<E>
     + Default
@@ -62,6 +63,14 @@ pub trait OwnedExecPayload<E: EthSpec>:
 {
 }
 
+/// `ExecPayload` functionality the requires ownership.
+#[cfg(not(feature = "arbitrary"))]
+pub trait OwnedExecPayload<E: EthSpec>:
+    ExecPayload<E> + Default + Serialize + DeserializeOwned + Encode + Decode + TestRandom + 'static
+{
+}
+
+#[cfg(feature = "arbitrary")]
 impl<E: EthSpec, P> OwnedExecPayload<E> for P where
     P: ExecPayload<E>
         + Default
@@ -71,6 +80,19 @@ impl<E: EthSpec, P> OwnedExecPayload<E> for P where
         + Decode
         + TestRandom
         + for<'a> arbitrary::Arbitrary<'a>
+        + 'static
+{
+}
+
+#[cfg(not(feature = "arbitrary"))]
+impl<E: EthSpec, P> OwnedExecPayload<E> for P where
+    P: ExecPayload<E>
+        + Default
+        + Serialize
+        + DeserializeOwned
+        + Encode
+        + Decode
+        + TestRandom
         + 'static
 {
 }
@@ -129,11 +151,11 @@ pub trait AbstractExecPayload<E: EthSpec>:
             TestRandom,
             TreeHash,
             Derivative,
-            arbitrary::Arbitrary,
         ),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
         derivative(PartialEq, Hash(bound = "E: EthSpec")),
         serde(bound = "E: EthSpec", deny_unknown_fields),
-        arbitrary(bound = "E: EthSpec"),
+        cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec")),
         ssz(struct_behaviour = "transparent"),
     ),
     ref_attributes(
@@ -146,10 +168,11 @@ pub trait AbstractExecPayload<E: EthSpec>:
     cast_error(ty = "Error", expr = "BeaconStateError::IncorrectStateVariant"),
     partial_getter_error(ty = "Error", expr = "BeaconStateError::IncorrectStateVariant")
 )]
-#[derive(Debug, Clone, Serialize, Deserialize, TreeHash, Derivative, arbitrary::Arbitrary)]
+#[derive(Debug, Clone, Serialize, Deserialize, TreeHash, Derivative)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derivative(PartialEq, Hash(bound = "E: EthSpec"))]
 #[serde(bound = "E: EthSpec")]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 #[tree_hash(enum_behaviour = "transparent")]
 pub struct FullPayload<E: EthSpec> {
     #[superstruct(
@@ -490,11 +513,11 @@ impl<E: EthSpec> TryFrom<ExecutionPayloadHeader<E>> for FullPayload<E> {
             TestRandom,
             TreeHash,
             Derivative,
-            arbitrary::Arbitrary
         ),
+        cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary)),
         derivative(PartialEq, Hash(bound = "E: EthSpec")),
         serde(bound = "E: EthSpec", deny_unknown_fields),
-        arbitrary(bound = "E: EthSpec"),
+        cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec")),
         ssz(struct_behaviour = "transparent"),
     ),
     ref_attributes(
@@ -506,10 +529,11 @@ impl<E: EthSpec> TryFrom<ExecutionPayloadHeader<E>> for FullPayload<E> {
     cast_error(ty = "Error", expr = "BeaconStateError::IncorrectStateVariant"),
     partial_getter_error(ty = "Error", expr = "BeaconStateError::IncorrectStateVariant")
 )]
-#[derive(Debug, Clone, Serialize, Deserialize, TreeHash, Derivative, arbitrary::Arbitrary)]
+#[derive(Debug, Clone, Serialize, Deserialize, TreeHash, Derivative)]
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derivative(PartialEq, Hash(bound = "E: EthSpec"))]
 #[serde(bound = "E: EthSpec")]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 #[tree_hash(enum_behaviour = "transparent")]
 pub struct BlindedPayload<E: EthSpec> {
     #[superstruct(

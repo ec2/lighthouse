@@ -10,6 +10,7 @@ use tree_hash_derive::TreeHash;
 
 /// A Validators signed contribution proof to publish on the `sync_committee_contribution_and_proof`
 /// gossipsub topic.
+#[cfg_attr(feature = "arbitrary", derive(arbitrary::Arbitrary))]
 #[derive(
     Debug,
     Clone,
@@ -20,10 +21,9 @@ use tree_hash_derive::TreeHash;
     Decode,
     TestRandom,
     TreeHash,
-    arbitrary::Arbitrary,
 )]
 #[serde(bound = "E: EthSpec")]
-#[arbitrary(bound = "E: EthSpec")]
+#[cfg_attr(feature = "arbitrary", arbitrary(bound = "E: EthSpec"))]
 pub struct SignedContributionAndProof<E: EthSpec> {
     /// The `ContributionAndProof` that was signed.
     pub message: ContributionAndProof<E>,
